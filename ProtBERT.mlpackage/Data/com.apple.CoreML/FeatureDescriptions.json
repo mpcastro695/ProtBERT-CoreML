@@ -1,0 +1,21 @@
+{
+  "Outputs" : {
+    "prediction_scores" : {
+      "MLFeatureShortDescription" : "Predicted features of the given protein sequence. Shape of [max_input_length, vocab_size] (i.e., 512 x 30). "
+    }
+  },
+  "Inputs" : {
+    "attention_mask" : {
+      "MLFeatureShortDescription" : "Core ML's gather (embedding) layers don't require attention masks. This input will be ignored."
+    },
+    "token_type_ids" : {
+      "MLFeatureShortDescription" : "An array of token type IDs. This model uses 0s for the length of protein sequence A, and 1s for the length protein sequence B (if applicable). Pad with 0s to length 512."
+    },
+    "input_ids" : {
+      "MLFeatureShortDescription" : "An array of amino acid IDs. The input should begin with a [CLS] token, end with a [SEP] token, and padded [PAD] to a length of 512."
+    }
+  },
+  "TrainingInputs" : {
+
+  }
+}
