@@ -59,6 +59,7 @@ public class ProtTokenizer: ObservableObject {
     public func tokenize(protSequence: String) -> MLShapedArray<Int32> {
         let cleanedAAString = replaceUnkownAminoAcids(protSequence: protSequence)
         var inputTokens = Array(cleanedAAString).map{String($0)}
+        inputTokens = Array(inputTokens.prefix(ProtTokenizer.maxTokens - ProtTokenizer.overheadTokens))
         inputTokens.insert("[CLS]", at: 0)
         inputTokens.append("[SEP]")
         tokenSequence = inputTokens

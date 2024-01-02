@@ -8,15 +8,8 @@
 import Foundation
 import CoreML
 
-public class ProtTokenizer: ObservableObject {
-    
-    static let maxTokens = 512
-    static let overheadTokens = 2
+public class ProtTokenizer {
     private var lookupDictionary: [Substring: Int] = [:]
-    
-    @Published var aaSequence: [String] = []
-    @Published var tokenSequence: [String] = []
-    @Published var tokenCount = 0
 
     public init(){
         lookupDictionary = self.loadVocabulary()
@@ -42,7 +35,7 @@ public class ProtTokenizer: ObservableObject {
     }
 
     private func replaceUnkownAminoAcids(protSequence: String) -> String {
-        //Bridge to NSString to access APIs for replacing substrings
+        //Bridge to NSString to access the APIs for replacing substrings
         var cleanedString = protSequence as NSString
         cleanedString = cleanedString.replacingOccurrences(of: "U", with: "X") as NSString
         cleanedString = cleanedString.replacingOccurrences(of: "Z", with: "X") as NSString
@@ -52,36 +45,25 @@ public class ProtTokenizer: ObservableObject {
     }
 
     private func tokenID(of token: Substring) -> Int {
-        let unkownTokenID = lookupDictionary[Substring("[UNK]")]!
+        let unkownTokenID = 25 // Corresponds to X!
         return lookupDictionary[token] ?? unkownTokenID
     }
 
-    public func tokenize(protSequence: String) -> MLShapedArray<Int32> {
+    public func tokenize(protSequence: String) -> MLMultiArray {
         let cleanedAAString = replaceUnkownAminoAcids(protSequence: protSequence)
-        var inputTokens = Array(cleanedAAString).map{String($0)}
-        inputTokens = Array(inputTokens.prefix(ProtTokenizer.maxTokens - ProtTokenizer.overheadTokens))
-        inputTokens.insert("[CLS]", at: 0)
-        inputTokens.append("[SEP]")
-        tokenSequence = inputTokens
-        tokenCount = inputTokens.count
-        
-        // Get the token IDs
-        var inputIDs: [Int32] = []
-        for token in tokenSequence {
-            let tokenID = tokenID(of: Substring(token))
-            inputIDs.append(Int32(tokenID))
-        }
-        
-        // Fill the remaining token id slots with padding tokens
-        let padding = ProtTokenizer.maxTokens - inputIDs.count
-        inputIDs += Array(repeating: Int32(0), count: padding)
+        let aminoAcidSeq = cleanedAAString.split(separator: " ")
 
-        guard inputIDs.count == ProtTokenizer.maxTokens else {
-            fatalError("`inputIDs` array size isn't the right size.")
+        var inputIDs: [Int] = [2] // Start with a [CLS] token id
+        for aa in aminoAcidSeq {
+            let tokenID = tokenID(of: aa)
+            inputIDs.append(tokenID)
         }
+        inputIDs.append(3) //End with a [SEP] token id
         
-        let encodedInput = MLShapedArray(scalars: inputIDs, shape: [1, ProtTokenizer.maxTokens])
-        return encodedInput
+        guard let input = try? MLMultiArray(inputIDs) else {
+            fatalError("Issue making the MLMultiArray :(")
+        }
+        return input
     }
 
 }
