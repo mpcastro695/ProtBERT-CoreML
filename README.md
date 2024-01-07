@@ -9,6 +9,8 @@ You’ll need an environment running Python 3.8 and the following packages insta
 	PyTorch (used v. 2.0.0)
 	Transformers (used v. 4.27.1)
 	Core ML Tools (used v. 6.3)
+ 
+ If you're on an Apple Silicon Mac, you can clone the Conda environment from the included `environment.yml` file.   
 
 ## Model Conversion
 Once your environment is set up, all you have to do is run the included python script `protBERT.py`. The script will:
