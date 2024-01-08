@@ -8,9 +8,7 @@ import sys
 # Downloads the model and tokenizer from Hugginface's model hub
 tokenizer = BertTokenizer.from_pretrained("Rostlab/prot_bert", do_lower_case=False, torchscript=True)
 model = BertForMaskedLM.from_pretrained("Rostlab/prot_bert", torchscript=True).eval()
-torch.save(model, 'protBERT.pt')
-
-model = torch.load('protBERT.pt')
+torch.save(model, 'protBERT.pth')
 print(model.modules)
 
 # Encodes an example input
@@ -28,10 +26,8 @@ trace_input = {'input_ids': torch.randint(1, 20, (1, 512), dtype=torch.int64),
                 'token_type_ids': torch.zeros(1, 512, dtype=torch.int64),
                 'attention_mask': torch.zeros(1, 512, dtype=torch.int64)}
 traced_model = torch.jit.trace(model, example_kwarg_inputs=trace_input)
-torch.jit.save(traced_model, "traced_protBert.pt")
 
 # Converts the traced model
-traced_model = torch.jit.load('traced_protBert.pt')
 model = ct.convert(
      traced_model,
      convert_to="mlprogram",
