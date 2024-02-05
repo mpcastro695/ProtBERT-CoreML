@@ -25,7 +25,7 @@ Once your environment is set up, just run the script `protBERT.py`. The script w
 
 5.  Convert the trace with Core ML Tools and save it to disk as a Core ML model package `ProtBERT.mlpackage`
 
-5.	Load the Core ML model and verify that its prediction matches the original PyTorch model
+5.	Load the Core ML model and verify that its prediction matches with the original PyTorch model
 
 ## Inference
 Now you can incorporate the model package, tokenizer and vocab files (`ProtBERT.mlpackage`, `ProtTokenizer.swift`, `vocab.txt`) into your project. Xcode will automatically generate a class for your model package. The tokenizer has a vocab size of 30: 25 AAs -of which, U,Z,O, and B are mapped to X- and 5 model tokens. The tokenizer expects as input up to 510 uppercased, single-letter AA IDs. To extract features from a sequence:
@@ -43,7 +43,7 @@ guard let output = try? model.prediction(input_ids: encodedInput, token_type_ids
 }
 print(output.features)
 ```
-The model’s output is of size [max_seq_length, vocab_size] (i.e., 512 x 30). Please refer to the `ProtBERT Demo` project for more details on using the converted model.
+The model’s output is of size [max_seq_length, hidden_size] (i.e., 512 x 1024). Please refer to the `ProtBERT Demo` project for more details on using the converted model.
 
 ## Optimizations
 Following guidance from this [paper](https://machinelearning.apple.com/research/neural-engine-transformers), the following changes were made prior to conversion:
