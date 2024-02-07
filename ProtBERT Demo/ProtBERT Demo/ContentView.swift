@@ -54,6 +54,7 @@ struct ContentView: View {
                     guard let output = try? model.prediction(input_ids: encodedInput) else {
                             fatalError("Unexpected runtime error.")
                     }
+                    print(output.features.shape)
                     results.append(output.features)
                 } label: {
                     Text("Extract Features")
