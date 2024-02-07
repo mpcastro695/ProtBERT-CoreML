@@ -70,7 +70,7 @@ struct Features: View {
 
 struct Features2DVisual: View {
     
-    let gridSize = CGSize(width: 6, height: 6)
+    let gridSize = CGSize(width: 5, height: 5)
     let spacing: CGFloat = 2
     let rows = 32
     let columns = 32

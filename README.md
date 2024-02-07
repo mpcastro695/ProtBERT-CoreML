@@ -57,7 +57,7 @@ The pre-trained weights are reshaped to match the layer changes by registering p
 ## GPU / ANE Support?
 The model is currently entirely CPU-bound. As of macOS Sonoma 14.3, running the model in an Xcode project produces the following warning:
 ```
-MLESEngine is not currently supported for models with range shape inputs that try to utilize the Neural Engine.
+MLE5Engine is not currently supported for models with range shape inputs that try to utilize the Neural Engine.
 ```
 
 ![Alt text](<ProtBERT Demo/ProtBERT Demo/Assets.xcassets/Features.imageset/Screenshot.png>)
