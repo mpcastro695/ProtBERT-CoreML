@@ -1,8 +1,6 @@
 import torch
 from src.modeling_bert import BertEmbeddings, BertIntermediate, BertSelfOutput, BertOutput, BertAttention, BertLayer, BertEncoder, BertModel, BertPooler, BertPredictionHeadTransform, BertLMPredictionHead, BertOnlyMLMHead, BertForMaskedLM
 
-EPS = 1e-7
-
 def linear_to_conv2d(state_dict, prefix=None, local_metadata=None, strict=True, missing_keys=None, unexpected_keys=None, error_msgs=None):
     """
      Returns a BERT state_dict where the weights of linear layers are unsqueezed twice to fit
@@ -124,7 +122,8 @@ class BertSelfOutputANE(BertSelfOutput):
         super().__init__(config)
         self.seq_len_dim = 3
         setattr(self, 'dense', torch.nn.Conv2d(in_channels=config.hidden_size, out_channels=config.hidden_size, kernel_size=1))
-        setattr(self, 'LayerNorm', BertLayerNormANE(num_channels=config.hidden_size, eps=config.layer_norm_eps))
+        if not self.pre_layer_norm:
+            setattr(self, 'LayerNorm', BertLayerNormANE(num_channels=config.hidden_size, eps=config.layer_norm_eps))
 
 class BertOutputANE(BertOutput):
     # Hugging Face 4.17 BERT Output adapter class
