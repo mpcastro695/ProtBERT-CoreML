@@ -15,7 +15,7 @@ torch_model = BertForMaskedLM.from_pretrained('Rostlab/prot_bert', return_dict=F
 optimized_model = BertForMaskedLMANE(torch_model.config).eval()
 optimized_model.load_state_dict(torch_model.state_dict(), strict=True)
 
-# 3. Remove the final dropout and pooler layers to reveal the last hidden layer sized at [max_Tokens, features(i.e. 768)]
+# 3. Remove the classifier head to reveal the encoder's output sized at [input_ids, hidden_size (i.e. 1024)]
 torch_model = torch.nn.Sequential(*(list(torch_model.children())[:-1])).eval()
 print(torch_model.modules)
 optimized_model = torch.nn.Sequential(*(list(optimized_model.children())[:-1])).eval()

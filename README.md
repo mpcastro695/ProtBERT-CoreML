@@ -43,7 +43,7 @@ guard let output = try? model.prediction(input_ids: encodedInput, token_type_ids
 }
 print(output.features)
 ```
-The model’s output is a [MLMultiArray](https://developer.apple.com/documentation/coreml/mlmultiarray) of size [input_ids, hidden_size]. Please refer to the `ProtBERT Demo` project for more details on using the converted model.
+The model’s output is a 2D [MLMultiArray](https://developer.apple.com/documentation/coreml/mlmultiarray) with a shape of [input_ids, hidden_size (i.e., 1024)]. Please refer to the `ProtBERT Demo` project for more details on using the converted model.
 
 ## Optimizations
 Following guidance from this [paper](https://machinelearning.apple.com/research/neural-engine-transformers), the following changes were made prior to conversion:
