@@ -12,14 +12,14 @@ public class ProtTokenizer: ObservableObject {
     
     static let maxTokens = 512
     static let overheadTokens = 2
-    private var lookupDictionary: [Substring: Int] = [:]
+    private var vocab: [Substring: Int] = [:]
     
     @Published var aaSequence: [String] = []
     @Published var tokenSequence: [String] = []
     @Published var tokenCount = 0
 
     public init(){
-        lookupDictionary = self.loadVocabulary()
+        vocab = self.loadVocabulary()
     }
 
     private func loadVocabulary() -> [Substring: Int] {
@@ -51,37 +51,28 @@ public class ProtTokenizer: ObservableObject {
         return cleanedString as String
     }
 
-    private func tokenID(of token: Substring) -> Int {
-        let unkownTokenID = lookupDictionary[Substring("[UNK]")]!
-        return lookupDictionary[token] ?? unkownTokenID
+    private func getTokenID(of token: Substring) -> Int {
+        let unkownTokenID = vocab[Substring("[UNK]")]!
+        return vocab[token] ?? unkownTokenID
     }
 
     public func tokenize(protSequence: String) -> MLMultiArray {
         let cleanedAAString = replaceUnkownAminoAcids(protSequence: protSequence)
-        var inputTokens = Array(cleanedAAString).map{String($0)}
-        inputTokens = Array(inputTokens.prefix(ProtTokenizer.maxTokens - ProtTokenizer.overheadTokens))
-        inputTokens.insert("[CLS]", at: 0)
-        inputTokens.append("[SEP]")
-        tokenSequence = inputTokens
-        tokenCount = inputTokens.count
+        var tokens = Array(cleanedAAString).map{String($0)}
+        tokens = Array(tokens.prefix(ProtTokenizer.maxTokens - ProtTokenizer.overheadTokens))
+        tokens.insert("[CLS]", at: 0)
         
-        // Get the token IDs
-        var inputIDs: [Int32] = []
-        for token in tokenSequence {
-            let tokenID = tokenID(of: Substring(token))
-            inputIDs.append(Int32(tokenID))
-        }
+        tokenSequence = tokens
+        tokenCount = tokens.count
         
-//        // Fill the remaining token id slots with padding tokens
-//        let padding = ProtTokenizer.maxTokens - inputIDs.count
-//        inputIDs += Array(repeating: Int32(0), count: padding)
+        tokens.append("[SEP]")
+        // Fill the remaining slots with padding tokens
+        let padding = ProtTokenizer.maxTokens - tokens.count
+        tokens += Array(repeating: "[PAD]", count: padding)
+        
+        let tokenIDs = tokens.compactMap{vocab[Substring($0)]}
 
-//        guard inputIDs.count <= ProtTokenizer.maxTokens else {
-//            fatalError("`inputIDs` array size isn't the right size.")
-//        }
-        let encodedInput = MLMultiArray(MLShapedArray(scalars: inputIDs, shape: [1, inputIDs.count]))
-        print(encodedInput.shape)
-        return encodedInput
+        return MLMultiArray(MLShapedArray(scalars: tokenIDs.compactMap{Int32($0)}, shape: [1, ProtTokenizer.maxTokens]))
     }
 
 }

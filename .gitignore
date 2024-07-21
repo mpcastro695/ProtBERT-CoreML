@@ -1,3 +1,5 @@
 protBERT.pth
-ProtBERT.mlpackage/
-
+ProtBERT_FP16.mlpackage/
+ProtBERT_FP32.mlpackage/
+__pycache__/
+.idea/

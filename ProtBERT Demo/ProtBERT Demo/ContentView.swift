@@ -10,7 +10,7 @@ import CoreML
 
 struct ContentView: View {
     
-    let model = try! ProtBERT()
+    let model = try! ProtBERT_FP16()
     @StateObject var tokenizer = ProtTokenizer()
     
     @State private var entry = String()

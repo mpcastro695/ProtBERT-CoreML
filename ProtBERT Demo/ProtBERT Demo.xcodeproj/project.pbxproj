@@ -14,7 +14,7 @@
 		E82905C829DE68F4002B08D8 /* vocab.txt in Resources */ = {isa = PBXBuildFile; fileRef = E82905C729DE68F4002B08D8 /* vocab.txt */; };
 		E82905CA29DFEE20002B08D8 /* ProtTokenizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E82905C929DFEE20002B08D8 /* ProtTokenizer.swift */; };
 		E82905D829E263A3002B08D8 /* Features.swift in Sources */ = {isa = PBXBuildFile; fileRef = E82905D729E263A3002B08D8 /* Features.swift */; };
-		E8A3E9E02B5397CA00FC0CD1 /* ProtBERT.mlpackage in Sources */ = {isa = PBXBuildFile; fileRef = E8A3E9DF2B5397CA00FC0CD1 /* ProtBERT.mlpackage */; };
+		E849D45E2C4CF20900A96A32 /* ProtBERT_FP16.mlpackage in Sources */ = {isa = PBXBuildFile; fileRef = E849D45D2C4CF20900A96A32 /* ProtBERT_FP16.mlpackage */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,7 +27,7 @@
 		E82905C729DE68F4002B08D8 /* vocab.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = vocab.txt; sourceTree = "<group>"; };
 		E82905C929DFEE20002B08D8 /* ProtTokenizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProtTokenizer.swift; sourceTree = "<group>"; };
 		E82905D729E263A3002B08D8 /* Features.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Features.swift; sourceTree = "<group>"; };
-		E8A3E9DF2B5397CA00FC0CD1 /* ProtBERT.mlpackage */ = {isa = PBXFileReference; lastKnownFileType = folder.mlpackage; path = ProtBERT.mlpackage; sourceTree = "<group>"; };
+		E849D45D2C4CF20900A96A32 /* ProtBERT_FP16.mlpackage */ = {isa = PBXFileReference; lastKnownFileType = folder.mlpackage; path = ProtBERT_FP16.mlpackage; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,9 +60,9 @@
 		E82905B229DE680C002B08D8 /* ProtBERT Demo */ = {
 			isa = PBXGroup;
 			children = (
-				E8A3E9DF2B5397CA00FC0CD1 /* ProtBERT.mlpackage */,
 				E82905B329DE680C002B08D8 /* ProtBERT_DemoApp.swift */,
 				E82905B529DE680C002B08D8 /* ContentView.swift */,
+				E849D45D2C4CF20900A96A32 /* ProtBERT_FP16.mlpackage */,
 				E82905C929DFEE20002B08D8 /* ProtTokenizer.swift */,
 				E82905D729E263A3002B08D8 /* Features.swift */,
 				E82905C729DE68F4002B08D8 /* vocab.txt */,
@@ -152,7 +152,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E8A3E9E02B5397CA00FC0CD1 /* ProtBERT.mlpackage in Sources */,
+				E849D45E2C4CF20900A96A32 /* ProtBERT_FP16.mlpackage in Sources */,
 				E82905B629DE680C002B08D8 /* ContentView.swift in Sources */,
 				E82905D829E263A3002B08D8 /* Features.swift in Sources */,
 				E82905B429DE680C002B08D8 /* ProtBERT_DemoApp.swift in Sources */,

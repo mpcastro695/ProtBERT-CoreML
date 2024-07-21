@@ -22,7 +22,7 @@ struct Features: View {
                 Text("Features")
                     .font(.title)
                     .bold()
-                Text("Sequence length: \(tokenizer.tokenCount - 2)")
+                Text("Sequence length: \(tokenizer.tokenCount - 1)")
             }
             .foregroundColor(.secondary)
             .padding()
