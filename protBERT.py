@@ -1,7 +1,6 @@
 import torch
 import numpy as np
 import coremltools as ct
-# import coremltools.optimize.coreml as cto
 from transformers import BertForMaskedLM, BertTokenizer
 import re
 
@@ -59,24 +58,34 @@ model_f16 = ct.convert(
 model_f16.save('ProtBERT_FP16.mlpackage')
 
 # 6. Load the Core ML model and verify that its prediction matches that of the original PyTorch model
-relTolerance = 1e+03
-absTolerance = 1e-02
-
 example_input = 'M V H L T P E E K S A V T A L W G K V N V D E V G G E A L G R L L V V Y P W T Q R F F E S F G D L S T P D A V M G N P K V K A H G K K V L G A F S D G L A H L D N L K G T F A T L S E L H C D K L H V D P E N F R L L G N V L V C V L A H H F G K E F T P P V Q A A Y Q K V V A G V A N A L A H K Y H'
 example_input = re.sub(r'[UZOB]', 'X', example_input)
 encoded_input = tokenizer(example_input, return_tensors='pt', max_length=512, padding="max_length")
 
-model = ct.models.MLModel('ProtBERT_FP16.mlpackage')
-coreML_output = model.predict({'input_ids': encoded_input['input_ids'].type('torch.FloatTensor')})
-coreML_tensor = coreML_output.get('features')
-coreML_tensor = np.expand_dims(coreML_tensor, axis=0)
+model_f32 = ct.models.MLModel('ProtBERT_FP32.mlpackage')
+prediction_f32 = model_f32.predict({'input_ids': encoded_input['input_ids'].type('torch.FloatTensor')})
+core32_tensor = prediction_f32.get('features')
+core32_tensor = np.expand_dims(core32_tensor, axis=0)
+
+model_f16 = ct.models.MLModel('ProtBERT_FP16.mlpackage')
+prediction_f16 = model_f16.predict({'input_ids': encoded_input['input_ids'].type('torch.FloatTensor')})
+core16_tensor = prediction_f16.get('features')
+core16_tensor = np.expand_dims(core16_tensor, axis=0)
 
 with torch.no_grad():
     torch_output = torch_model(encoded_input['input_ids'])
 torch_tensor = torch_output[0].detach().cpu().numpy() if torch_output[0].requires_grad else torch_output[0].cpu().numpy()
 
-np.testing.assert_allclose(coreML_tensor, torch_tensor, relTolerance, absTolerance)
-print('Congrats on the new model!')
+relTolerance = 1e-02
+absTolerance = 1e-05
+np.testing.assert_allclose(core32_tensor, torch_tensor, relTolerance, absTolerance)
+print('Congrats on the new FP32 model!')
+
+relTolerance = 1e-01
+absTolerance = 8e-02
+np.testing.assert_allclose(core16_tensor, torch_tensor, relTolerance, absTolerance)
+print('Congrats on the new FP16 model!')
+
 
 
 
