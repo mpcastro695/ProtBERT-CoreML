@@ -4,3 +4,5 @@ ProtBERT_FP32.mlpackage/
 __pycache__/
 .idea/
 .DS_Store/
+ProtBERT_FP16-My Mac.mlperf/
+ProtBERT_FP16-Martin’s iPhone.mlperf/

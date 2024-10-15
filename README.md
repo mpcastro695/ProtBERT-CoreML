@@ -45,6 +45,7 @@ print(output.features)
 ```
 The model’s output is a 2D [MLMultiArray](https://developer.apple.com/documentation/coreml/mlmultiarray) with a shape of [maxTokens, features] i.e., [512, 1024]. Please refer to the `ProtBERT Demo` project for more details on using the converted model.
 
+![Alt text](<ProtBERT Demo/ProtBERT Demo/Assets.xcassets/Features.imageset/Screenshot.png>)
 ## Optimizations
 Following guidance from this [paper](https://machinelearning.apple.com/research/neural-engine-transformers), the following changes were made prior to conversion:
 
@@ -57,5 +58,4 @@ The pre-trained weights are reshaped to match the layer changes by registering p
 ## GPU / ANE Support
 The conversion script has two options for compute precision: a 32-bit floating point (full-precision) model for execution on the GPU, and a 16-bit floating point (half-precision) model for exectution on the ANE. By default, both model packages are saved to disk.
 
-![Alt text](<ProtBERT Demo/ProtBERT Demo/Assets.xcassets/Features.imageset/Screenshot.png>)
-
+![Alt text](<ProtBERT Demo/ProtBERT Demo/Assets.xcassets/FP16Report_MacOS.imageset/FP16Report_MacOS.PNG>)
